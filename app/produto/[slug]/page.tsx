@@ -48,7 +48,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </p>
 
             <p>
-              <strong>Produtor:</strong> {producer?.name}
+              <strong>Produtor:</strong>{" "}
+              <Link
+                href={`/produtor/${producer?.slug}`}
+                className="text-green-700 hover:underline"
+              >
+                {producer?.name}
+              </Link>
             </p>
 
             <p>
