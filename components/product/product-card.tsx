@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/format/currency";
+import { useCart } from "@/store/cart";
 
 type ProductCardProps = {
   product: Product;
 };
 
 export function ProductCard({ product }: ProductCardProps) {
+  const addItem = useCart((state) => state.addItem);
   return (
     <Link
       href={`/produto/${product.slug}`}
@@ -31,6 +35,16 @@ export function ProductCard({ product }: ProductCardProps) {
             </p>
             <p className="text-sm text-zinc-500">por {product.unit}</p>
           </div>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              addItem(product);
+            }}
+            className="mt-4 w-full rounded-2xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+          >
+            Adicionar ao carrinho
+          </button>
 
           <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
             Ver produto
