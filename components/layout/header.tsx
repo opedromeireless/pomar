@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShoppingBasket } from "lucide-react";
 import { Container } from "./container";
+import { Search } from "lucide-react";
 
 export function Header() {
   return (
@@ -10,7 +11,21 @@ export function Header() {
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-600 text-white shadow-sm">
             <ShoppingBasket className="h-5 w-5" />
           </div>
+          <form
+            action="/busca"
+            className="hidden flex-1 justify-center lg:flex"
+          >
+            <div className="relative w-full max-w-md">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
 
+              <input
+                type="text"
+                name="q"
+                placeholder="Pesquisar produtos..."
+                className="w-full rounded-xl border py-2 pl-10 pr-4"
+              />
+            </div>
+          </form>
           <div className="flex flex-col leading-none">
             <span className="text-lg font-bold text-zinc-900">Pomar</span>
             <span className="text-xs text-zinc-500">
