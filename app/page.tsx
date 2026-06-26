@@ -118,6 +118,22 @@ export default function HomePage() {
         </Container>
       </section>
 
+      <section className="mt-16">
+        <h2 className="mb-6 text-3xl font-bold">Categorias</h2>
+
+        <div className="flex flex-wrap gap-4">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/categoria/${category.slug}`}
+              className="rounded-full border px-6 py-3 transition hover:bg-green-600 hover:text-white"
+            >
+              {category.name}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section id="produtos" className="py-16">
         <Container>
           <div className="mb-8 flex items-end justify-between gap-4">
