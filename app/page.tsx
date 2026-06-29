@@ -108,9 +108,11 @@ export default function HomePage() {
                   Um marketplace hiperlocal pensado para escalar.
                 </h3>
                 <p className="mt-3 max-w-2xl text-zinc-600">
-                  O portfólio do Pomar foi desenhado para demonstrar arquitetura
-                  de produto, modelagem de domínio, catálogo, carrinho,
-                  checkout, painel do produtor e integração com backend moderno.
+                  O projeto Pomar tem como foco aprimorar e facilitar a rede de
+                  comércio local, auxiliando e apoiando agricultores que queiram
+                  vender os seus pordutos de forma mais prática, fácil,
+                  organizada e viável. Além de conecta-los a uma vasta gama de
+                  clientes.
                 </p>
               </div>
             </div>

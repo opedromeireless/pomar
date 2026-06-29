@@ -25,6 +25,14 @@ export function ProductCard({ product }: ProductCardProps) {
         className="aspect-[4/3] w-full object-cover"
       />
 
+      <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+        {product.categoryId === "1"
+          ? "Verduras"
+          : product.categoryId === "2"
+            ? "Frutas"
+            : "Flores"}
+      </span>
+
       <div className="space-y-3 p-5">
         <div className="space-y-1">
           <h3 className="text-lg font-semibold text-zinc-900">
@@ -40,6 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <p className="text-xl font-bold text-green-700">
               {formatCurrency(product.price)}
             </p>
+            <p className="text-xs text-zinc-500">Estoque: {product.stock}</p>
             <p className="text-sm text-zinc-500">por {product.unit}</p>
           </div>
 
@@ -50,11 +59,11 @@ export function ProductCard({ product }: ProductCardProps) {
             }}
             className="mt-4 w-full rounded-2xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
           >
-            Adicionar ao carrinho
+            🛒 Adicionar
           </button>
 
           <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-            Ver produto
+            Detalhes →
           </span>
         </div>
       </div>
