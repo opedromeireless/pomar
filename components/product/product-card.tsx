@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/format/currency";
 import { useCart } from "@/store/cart";
+import Image from "next/image";
 
 type ProductCardProps = {
   product: Product;
@@ -16,7 +17,13 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/produto/${product.slug}`}
       className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
     >
-      <div className="aspect-[4/3] bg-gradient-to-br from-green-100 via-lime-50 to-amber-50" />
+      <Image
+        src={product.imageUrl}
+        alt={product.name}
+        width={500}
+        height={400}
+        className="aspect-[4/3] w-full object-cover"
+      />
 
       <div className="space-y-3 p-5">
         <div className="space-y-1">

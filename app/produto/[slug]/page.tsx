@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { products, producers } from "@/data/mock-data";
 import { RelatedProducts } from "@/components/product/related-products";
+import Image from "next/image";
 
 type ProductPageProps = {
   params: Promise<{
@@ -27,7 +28,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </Link>
 
       <div className="grid gap-12 lg:grid-cols-2">
-        <div className="aspect-square rounded-3xl bg-green-100" />
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          width={700}
+          height={700}
+          className="aspect-square w-full rounded-3xl object-cover"
+        />
 
         <div>
           <h1 className="text-5xl font-bold">{product.name}</h1>
