@@ -1,4 +1,4 @@
-import { products } from "@/data/mock-data";
+import { getProducts } from "@/lib/data/produtos";
 import { ProductCard } from "@/components/product/product-card";
 
 type SearchPageProps = {
@@ -10,7 +10,8 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q = "" } = await searchParams;
 
-  const filteredProducts = products.filter((product) =>
+  const allProducts = await getProducts();
+  const filteredProducts = allProducts.filter((product) =>
     product.name.toLowerCase().includes(q.toLowerCase()),
   );
 

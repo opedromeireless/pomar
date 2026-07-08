@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { ArrowRight, Leaf, MapPin, ShoppingBasket } from "lucide-react";
 
-import { categories, producers, products } from "@/data/mock-data";
+import { categories } from "@/lib/data/categorias";
+import { getProducts } from "@/lib/data/produtos";
+import { getProducers } from "@/lib/data/produtores";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
 import { ProducerCard } from "@/components/producer/producer-card";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await getProducts();
+  const producers = await getProducers();
+
   return (
     <main className="min-h-screen bg-[#f7f6f2] text-zinc-900">
       <Header />
@@ -110,8 +115,8 @@ export default function HomePage() {
                 <p className="mt-3 max-w-2xl text-zinc-600">
                   O projeto Pomar tem como foco aprimorar e facilitar a rede de
                   comércio local, auxiliando e apoiando agricultores que queiram
-                  vender os seus pordutos de forma mais prática, fácil,
-                  organizada e viável. Além de conecta-los a uma vasta gama de
+                  vender os seus produtos de forma mais prática, fácil,
+                  organizada e viável. Além de conectá-los a uma vasta gama de
                   clientes.
                 </p>
               </div>
@@ -121,19 +126,21 @@ export default function HomePage() {
       </section>
 
       <section className="mt-16">
-        <h2 className="mb-6 text-3xl font-bold">Categorias</h2>
+        <Container>
+          <h2 className="mb-6 text-3xl font-bold">Categorias</h2>
 
-        <div className="flex flex-wrap gap-4">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/categoria/${category.slug}`}
-              className="rounded-full border px-6 py-3 transition hover:bg-green-600 hover:text-white"
-            >
-              {category.name}
-            </Link>
-          ))}
-        </div>
+          <div className="flex flex-wrap gap-4">
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/categoria/${category.slug}`}
+                className="rounded-full border px-6 py-3 transition hover:bg-green-600 hover:text-white"
+              >
+                {category.name}
+              </Link>
+            ))}
+          </div>
+        </Container>
       </section>
 
       <section id="produtos" className="py-16">

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { producers, products } from "@/data/mock-data";
+import { getProducerBySlug } from "@/lib/data/produtores";
+import { getProductsByProducer } from "@/lib/data/produtos";
 import { ProductCard } from "@/components/product/product-card";
 
 type ProducerPageProps = {
@@ -13,15 +14,13 @@ type ProducerPageProps = {
 export default async function ProducerPage({ params }: ProducerPageProps) {
   const { slug } = await params;
 
-  const producer = producers.find((item) => item.slug === slug);
+  const producer = await getProducerBySlug(slug);
 
   if (!producer) {
     notFound();
   }
 
-  const producerProducts = products.filter(
-    (item) => item.producerId === producer.id,
-  );
+  const producerProducts = await getProductsByProducer(producer.id);
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
@@ -37,9 +36,7 @@ export default async function ProducerPage({ params }: ProducerPageProps) {
 
           <div>
             <h1 className="text-4xl font-bold">{producer.name}</h1>
-
             <p className="mt-2 text-gray-600">{producer.description}</p>
-
             <p className="mt-3">📍 {producer.city}</p>
           </div>
         </div>

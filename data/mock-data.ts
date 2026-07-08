@@ -14,7 +14,7 @@ export const producers: Producer[] = [
     slug: "familia-schmitt",
     description:
       "Produtores locais de hortaliças frescas, colhidas semanalmente.",
-    whatsapp: "5551999999999",
+    whatsapp: "5551980553031",
     city: "Ivoti",
     neighborhood: "Picada Feijão",
     avatarUrl: "/images/producers/familia-schmitt.jpg",

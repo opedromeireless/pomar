@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { categories, products } from "@/data/mock-data";
+import { getCategoryBySlug } from "@/lib/data/categorias";
+import { getProductsByCategory } from "@/lib/data/produtos";
 import { ProductCard } from "@/components/product/product-card";
 
 type CategoryPageProps = {
@@ -13,15 +14,13 @@ type CategoryPageProps = {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
 
-  const category = categories.find((item) => item.slug === slug);
+  const category = getCategoryBySlug(slug);
 
   if (!category) {
     notFound();
   }
 
-  const categoryProducts = products.filter(
-    (item) => item.categoryId === category.id,
-  );
+  const categoryProducts = await getProductsByCategory(slug);
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
@@ -40,6 +39,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+
+      {categoryProducts.length === 0 && (
+        <p className="text-gray-600">Nenhum produto nessa categoria ainda.</p>
+      )}
     </main>
   );
 }

@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { products, producers } from "@/data/mock-data";
-import { RelatedProducts } from "@/components/product/related-products";
 import Image from "next/image";
+
+import { getProductBySlug } from "@/lib/data/produtos";
+import { getProducerById } from "@/lib/data/produtores";
+import { AddToCartButton } from "@/components/product/add-to-cart-button";
+import { RelatedProducts } from "@/components/product/related-products";
 
 type ProductPageProps = {
   params: Promise<{
@@ -13,13 +16,13 @@ type ProductPageProps = {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const product = products.find((item) => item.slug === slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const producer = producers.find((item) => item.id === product.producerId);
+  const producer = await getProducerById(product.producerId);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
@@ -69,9 +72,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </p>
           </div>
 
-          <button className="mt-8 w-full rounded-xl bg-green-600 py-4 text-lg font-semibold text-white hover:bg-green-700">
-            Adicionar ao carrinho
-          </button>
+          <AddToCartButton product={product} />
         </div>
       </div>
 
