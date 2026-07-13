@@ -1,54 +1,74 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft, MapPin } from "lucide-react";
 
 import { getProducerBySlug } from "@/lib/data/produtores";
 import { getProductsByProducer } from "@/lib/data/produtos";
 import { ProductCard } from "@/components/product/product-card";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { Container } from "@/components/layout/container";
 
 type ProducerPageProps = {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 };
 
 export default async function ProducerPage({ params }: ProducerPageProps) {
   const { slug } = await params;
 
   const producer = await getProducerBySlug(slug);
-
-  if (!producer) {
-    notFound();
-  }
+  if (!producer) notFound();
 
   const producerProducts = await getProductsByProducer(producer.id);
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
-      <Link href="/" className="mb-8 inline-block font-semibold text-green-700">
-        ← Voltar
-      </Link>
+    <main className="bg-paper">
+      <Header />
 
-      <div className="rounded-3xl border bg-white p-8">
-        <div className="mb-8 flex items-center gap-6">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-100 text-4xl font-bold text-green-700">
+      <Container className="py-12">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-forest"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Voltar
+        </Link>
+
+        <div className="mt-8 flex flex-col items-start gap-6 border-b border-line pb-10 sm:flex-row sm:items-center">
+          <span className="stamp flex h-20 w-20 rotate-3 items-center justify-center bg-white font-display text-3xl italic text-forest">
             {producer.name.charAt(0)}
-          </div>
+          </span>
 
           <div>
-            <h1 className="text-4xl font-bold">{producer.name}</h1>
-            <p className="mt-2 text-gray-600">{producer.description}</p>
-            <p className="mt-3">📍 {producer.city}</p>
+            <h1 className="font-display text-4xl font-medium text-ink">
+              {producer.name}
+            </h1>
+            <p className="mt-2 max-w-xl text-ink/65">{producer.description}</p>
+            <p className="mt-3 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-forest">
+              <MapPin className="h-3.5 w-3.5" />
+              {producer.neighborhood} · {producer.city}
+            </p>
           </div>
         </div>
 
-        <h2 className="mb-6 text-2xl font-bold">Produtos</h2>
+        <h2 className="mt-10 mb-6 font-display text-2xl font-medium text-ink">
+          Produtos de {producer.name}
+        </h2>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {producerProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {producerProducts.map((product, i) => (
+            <ProductCard key={product.id} product={product} index={i} />
           ))}
         </div>
-      </div>
+
+        {producerProducts.length === 0 && (
+          <p className="text-ink/60">
+            Esse produtor ainda não tem produtos cadastrados.
+          </p>
+        )}
+      </Container>
+
+      <Footer />
     </main>
   );
 }

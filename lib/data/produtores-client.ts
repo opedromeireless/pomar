@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import type { Producer } from "@/lib/types";
+import type { Producer } from "@/types/producer";
 
 function mapProducer(row: any): Producer {
   return {

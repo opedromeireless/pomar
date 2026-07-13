@@ -1,29 +1,28 @@
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import type { Producer } from "@/types/producer";
 
-type ProducerCardProps = {
-  producer: Producer;
-};
-
-export function ProducerCard({ producer }: ProducerCardProps) {
+export function ProducerCard({ producer }: { producer: Producer }) {
   return (
     <Link
       href={`/produtor/${producer.slug}`}
-      className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+      className="group rounded-2xl border border-line bg-white p-6 transition hover:-translate-y-1 hover:border-forest hover:shadow-[0_18px_40px_-24px_rgba(31,77,55,0.3)]"
     >
-      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-lg font-bold text-green-700">
+      <span className="stamp flex h-14 w-14 rotate-3 items-center justify-center bg-paper font-display text-xl italic text-forest transition group-hover:rotate-0">
         {producer.name.charAt(0)}
-      </div>
+      </span>
 
-      <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-zinc-900">{producer.name}</h3>
-        <p className="line-clamp-2 text-sm text-zinc-600">
-          {producer.description}
-        </p>
-        <p className="text-sm text-zinc-500">
-          {producer.neighborhood} • {producer.city}
-        </p>
-      </div>
+      <h3 className="mt-4 font-display text-lg font-medium text-ink">
+        {producer.name}
+      </h3>
+      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-ink/65">
+        {producer.description}
+      </p>
+
+      <p className="mt-4 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-ink/50">
+        <MapPin className="h-3.5 w-3.5 text-forest" />
+        {producer.neighborhood} · {producer.city}
+      </p>
     </Link>
   );
 }

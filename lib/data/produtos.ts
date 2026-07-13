@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { categories } from "@/lib/data/categorias";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/types/product";
 
 function mapProduct(row: any): Product {
   const category = categories.find((c) => c.dbValue === row.categoria);
@@ -15,8 +15,8 @@ function mapProduct(row: any): Product {
     stock: row.estoque,
     categoryId: category?.id ?? "",
     producerId: row.produtor_id,
+    producerName: row.produtor?.nome ?? "",
     imageUrl: row.imagem_url ?? "/products/placeholder.jpg",
-    isAvailable: row.estoque > 0,
   };
 }
 
@@ -24,7 +24,7 @@ export async function getProducts(): Promise<Product[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("produtos")
-    .select("*")
+    .select("*, produtor:produtores(nome)")
     .order("criado_em", { ascending: false });
 
   if (error) throw error;
@@ -35,7 +35,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("produtos")
-    .select("*")
+    .select("*, produtor:produtores(nome)")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -52,7 +52,7 @@ export async function getProductsByCategory(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("produtos")
-    .select("*")
+    .select("*, produtor:produtores(nome)")
     .eq("categoria", category.dbValue);
 
   if (error) throw error;
@@ -65,7 +65,7 @@ export async function getProductsByProducer(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("produtos")
-    .select("*")
+    .select("*, produtor:produtores(nome)")
     .eq("produtor_id", producerId);
 
   if (error) throw error;

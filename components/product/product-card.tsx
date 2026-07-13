@@ -7,28 +7,26 @@ import { ShoppingCart, Eye, Leaf } from "lucide-react";
 import type { Product } from "@/types/product";
 import { formatCurrency } from "@/lib/format/currency";
 import { useCart } from "@/store/cart";
-import { categories, producers } from "@/data/mock-data";
+import { categories } from "@/lib/data/categorias";
 
 type ProductCardProps = {
   product: Product;
+  index?: number;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const addItem = useCart((state) => state.addItem);
 
-  const category = categories.find(
-    (category) => category.id === product.categoryId,
-  );
-
-  const producer = producers.find(
-    (producer) => producer.id === product.producerId,
-  );
-
-  const lowStock = product.stock <= 5;
+  const category = categories.find((c) => c.id === product.categoryId);
+  const outOfStock = product.stock <= 0;
+  const lowStock = !outOfStock && product.stock <= 5;
 
   return (
-    <div className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-green-500 hover:shadow-xl">
-      <Link href={`/produto/${product.slug}`}>
+    <div
+      className="animate-fade-up group overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-forest hover:shadow-[0_18px_40px_-24px_rgba(31,77,55,0.35)]"
+      style={{ animationDelay: `${index * 70}ms` }}
+    >
+      <Link href={`/produto/${product.slug}`} className="relative block">
         <div className="relative overflow-hidden">
           <Image
             src={product.imageUrl}
@@ -36,72 +34,76 @@ export function ProductCard({ product }: ProductCardProps) {
             width={600}
             height={450}
             sizes="(max-width:768px) 100vw, (max-width:1280px) 50vw, 33vw"
-            className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105"
+            className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
           />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-          <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-green-700 shadow">
-            {category?.name}
-          </span>
         </div>
+
+        {category && (
+          <span className="stamp absolute -left-2 -top-2 -rotate-6 bg-paper px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-forest shadow-sm">
+            {category.name}
+          </span>
+        )}
       </Link>
 
-      <div className="flex min-h-[280px] flex-col p-5">
-        <div className="mb-2 flex items-center gap-2 text-sm text-zinc-500">
-          <Leaf className="h-4 w-4 text-green-600" />
-
-          <span>{producer?.name}</span>
+      <div className="flex min-h-[260px] flex-col p-5">
+        <div className="mb-1 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-ink/50">
+          <Leaf className="h-3.5 w-3.5 text-forest" />
+          {product.producerName}
         </div>
 
         <Link href={`/produto/${product.slug}`}>
-          <h3 className="text-xl font-bold text-zinc-900 transition group-hover:text-green-700">
+          <h3 className="font-display text-xl font-medium text-ink transition group-hover:text-forest">
             {product.name}
           </h3>
         </Link>
 
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-600">
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/65">
           {product.description}
         </p>
 
-        <div className="mt-4">
-          <p className="text-2xl font-bold text-green-700">
+        <div className="mt-4 flex items-baseline gap-1.5">
+          <span className="font-mono text-2xl font-medium text-forest">
             {formatCurrency(product.price)}
-          </p>
-
-          <p className="text-sm text-zinc-500">por {product.unit}</p>
+          </span>
+          <span className="text-xs text-ink/50">/ {product.unit}</span>
         </div>
 
-        <div className="mt-4">
-          {lowStock ? (
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+        <div className="mt-3">
+          {outOfStock ? (
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide text-ink/40">
+              <span className="h-1.5 w-1.5 rounded-full bg-ink/30" />
+              Esgotado
+            </span>
+          ) : lowStock ? (
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide text-mustard-dark">
+              <span className="h-1.5 w-1.5 rounded-full bg-mustard" />
               Últimas {product.stock} unidades
             </span>
           ) : (
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide text-forest">
+              <span className="h-1.5 w-1.5 rounded-full bg-forest" />
               Em estoque
             </span>
           )}
         </div>
 
-        <div className="mt-auto pt-6">
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => addItem(product)}
-              className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 font-semibold text-white transition hover:bg-green-700"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Adicionar
-            </button>
+        <div className="mt-auto grid grid-cols-2 gap-2.5 pt-5">
+          <button
+            onClick={() => addItem(product)}
+            disabled={outOfStock}
+            className="flex items-center justify-center gap-2 rounded-full bg-forest px-4 py-2.5 text-sm font-semibold text-paper transition hover:bg-forest-light disabled:cursor-not-allowed disabled:bg-ink/20"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Adicionar
+          </button>
 
-            <Link
-              href={`/produto/${product.slug}`}
-              className="flex items-center justify-center gap-2 rounded-xl border border-zinc-300 bg-white px-4 py-3 font-semibold text-zinc-700 transition hover:border-green-600 hover:text-green-700"
-            >
-              <Eye className="h-4 w-4" />
-              Detalhes
-            </Link>
-          </div>
+          <Link
+            href={`/produto/${product.slug}`}
+            className="flex items-center justify-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm font-semibold text-ink/80 transition hover:border-forest hover:text-forest"
+          >
+            <Eye className="h-4 w-4" />
+            Detalhes
+          </Link>
         </div>
       </div>
     </div>

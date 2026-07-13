@@ -1,10 +1,12 @@
+import { Search } from "lucide-react";
 import { getProducts } from "@/lib/data/produtos";
 import { ProductCard } from "@/components/product/product-card";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { Container } from "@/components/layout/container";
 
 type SearchPageProps = {
-  searchParams: Promise<{
-    q?: string;
-  }>;
+  searchParams: Promise<{ q?: string }>;
 };
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -16,20 +18,32 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   );
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
-      <h1 className="mb-8 text-4xl font-bold">Resultado da busca</h1>
+    <main className="bg-paper">
+      <Header />
 
-      <p className="mb-8 text-gray-600">
-        Pesquisando por: <strong>{q}</strong>
-      </p>
+      <Container className="py-12">
+        <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-forest">
+          <Search className="h-3.5 w-3.5" />
+          Resultado da busca
+        </p>
+        <h1 className="mt-2 font-display text-4xl font-medium text-ink">
+          {q ? `“${q}”` : "Todos os produtos"}
+        </h1>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {filteredProducts.map((product, i) => (
+            <ProductCard key={product.id} product={product} index={i} />
+          ))}
+        </div>
 
-      {filteredProducts.length === 0 && <p>Nenhum produto encontrado.</p>}
+        {filteredProducts.length === 0 && (
+          <p className="text-ink/60">
+            Nenhum produto encontrado para essa busca.
+          </p>
+        )}
+      </Container>
+
+      <Footer />
     </main>
   );
 }

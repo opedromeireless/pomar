@@ -1,15 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f7f6f2;
-  --foreground: #18181b;
-}
+@theme {
+  --color-ink: #16241c;
+  --color-paper: #f7f3e8;
+  --color-forest: #1f4d37;
+  --color-forest-light: #2c6b4a;
+  --color-mustard: #d9a62e;
+  --color-mustard-dark: #a97a1a;
+  --color-rose: #c4707a;
+  --color-line: #e2dcc8;
 
-html {
-  scroll-behavior: smooth;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-plex), monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+::selection {
+  background-color: var(--color-mustard);
+  color: var(--color-ink);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
+.stamp {
+  position: relative;
+  border: 1.5px solid currentColor;
+  border-radius: 9999px;
+}
+
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px dashed currentColor;
+  border-radius: 9999px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.ledger-line {
+  border-top: 1px dashed var(--color-line);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-mustard);
+  outline-offset: 2px;
 }
